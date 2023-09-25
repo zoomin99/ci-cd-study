@@ -49,6 +49,12 @@ jobs:
         echo "${{ secrets.APPLICATION }}" > ./src/main/resources/application.properties
         cat ./src/main/resources/application.properties
 
+        - name: Upload application.properties
+          uses: actions/upload-artifact@v2
+          with:
+          name: my-artifact
+          path: ./src/main/resources/application.properties
+
     - name: make logback-spring.xml  #5
       run: |
         touch ./src/main/resources/logback-spring.xml
