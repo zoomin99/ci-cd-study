@@ -49,17 +49,17 @@ jobs:
         echo "${{ secrets.APPLICATION }}" > ./src/main/resources/application.properties
         cat ./src/main/resources/application.properties
 
-        - name: Upload application.properties
-          uses: actions/upload-artifact@v2
-          with:
-          name: my-artifact
-          path: ./src/main/resources/application.properties
-
     - name: make logback-spring.xml  #5
       run: |
         touch ./src/main/resources/logback-spring.xml
         echo "${{ secrets.LOGBACK }}" > ./src/main/resources/logback-spring.xml
         cat ./src/main/resources/logback-spring.xml
+
+    - name: upload
+      uses: actions/upload-artifact@v3
+      with:
+        name: artifact
+        path: ./src/main/resources
 
     - name: Build with Gradle #6
       uses: gradle/gradle-build-action@bd5760595778326ba7f1441bcf7e88b49de61a25 # v2.6.0
