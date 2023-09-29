@@ -31,19 +31,6 @@ jobs:
       with:
         java-version: '11'
         distribution: 'temurin'
-
-    - name: EC2 Docker Pull And Run #10
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USERNAME }}
-        key: ${{ secrets.EC2_SSH_KEY }}
-        script: |
-          ls -al
-          cd ~/.ssh
-          ls -al
-          cd ~/ssh
-
         
       # Cache Gradle #3
     - name: Gradle Caching
@@ -81,4 +68,23 @@ jobs:
     - name: Docker Hub publish #9
       run: docker push jjwm/inha:latest
   
-    
+    - name: EC2 Docker Stop and Delete Container and Image #10
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+          sudo docker stop inha-container
+          sudo docker rm inha-container
+          sudo docker rmi jjwm/inha:latest
+
+    - name: EC2 Docker Pull and Run #11
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+          sudo docker pull jjwm/inha:latest
+          sudo docker run -p 8080:8080 -d --name inha-container --log-driver=awslogs --log-opt awslogs-region=ap-northeast-2 --log-opt awslogs-group=jookimryu jjwm/inha:latest
