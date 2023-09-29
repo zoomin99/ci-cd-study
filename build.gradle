@@ -65,8 +65,6 @@ dependencies {
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
 	annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
 
-	implementation group: 'ca.pjer', name: 'logback-awslogs-appender', version: '1.6.0'
-
 	//implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.7.1'
 }
 
