@@ -32,14 +32,6 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
 
-    - name: SSH into EC2
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USERNAME }}
-        key: ${{ secrets.EC2_SSH_KEY }}
-        script: |
-          ls -al
         
       # Cache Gradle #3
     - name: Gradle Caching
@@ -76,4 +68,17 @@ jobs:
 
     - name: Docker Hub publish #9
       run: docker push jjwm/inha:latest
+
+    - name: EC2 Docker Pull And Run #10
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+          ls -al
+          cd ~/.ssh
+          ls -al
+          cd ~/ssh
+  
     
